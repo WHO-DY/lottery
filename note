@@ -1,0 +1,9 @@
+// TARGET : when a.html turn to b.html, also transfer value to b.html
+// 1. QUERY STRING
+var params = new URLSearchParams(window.location.search);
+//console.log("queryStr : " + queryStr)
+console.log("params : " + params)
+console.log("params value : " + params.get("value"));
+console.log("params index : " + params.get("index"));
+
+// 2. COOKIE

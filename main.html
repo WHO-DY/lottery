@@ -1,0 +1,34 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <tbody>
+            <table>
+                <tr >要開始嗎</tr>
+                <tr id="startTr">
+                    <td><button onclick=go()>要</button></td>
+                </tr>
+                <tr id="leaveTr">
+                    <td><button onclick=leave()>不要</button></td>
+                </tr>
+            </div>
+            </table>
+        </tbody>
+    </body>
+</html>
+<script>
+    function go() {
+        window.location.href = "file:///D:/GitHub/WHO-DY.github.io/main.html"
+    }
+    function leave() {
+        //window.location.href = "file:///D:/GitHub/lottery/lotteGo.html"
+        let date = new Date();
+        date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000)); // 設定 Cookie 7 天後過期
+        document.cookie = "user=Wu; path=/; expires=" + date.toUTCString();
+
+        document.cookie = "cookie1=value1; path=/; expires=" + date.toUTCString(); // 正確設定另一個 Cookie
+
+        var params = document.cookie.split(";");
+        console.log("params : " + params);
+    }
+</script>
