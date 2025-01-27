@@ -1,15 +1,17 @@
 <html>
     <head>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
+        <div id="lotteryDiv"></div>
         <tbody>
             <table>
                 <tr >要開始嗎</tr>
                 <tr id="startTr">
-                    <td><button onclick=go()>要</button></td>
+                    <td><button onclick=generateLottery()>產生</button></td>
                 </tr>
                 <tr id="leaveTr">
-                    <td><button onclick=leave()>不要</button></td>
+                    <td><button onclick=startLotte()>開始</button></td>
                 </tr>
             </div>
             </table>
@@ -17,18 +19,101 @@
     </body>
 </html>
 <script>
-    function go() {
-        window.location.href = "file:///D:/GitHub/WHO-DY.github.io/main.html"
+    const gNumberSize = 10;
+    const gNumberList = Array.from({ length: gNumberSize }, (_, i) => i + 1);
+    var garrNowDrawnNumber;
+    var gNumberNowSize = 40;
+
+    function drawNumber(nowSize, nowNumberList) {
+        var randomNum;
+        var index = Math.floor(Math.random() * nowSize);
+        drawnNumber = nowNumberList.splice(index, 1)[0];
+        nowSize--;
+        console.log("[drawNumber] drawnNumber : " + drawnNumber + " index : " + index + " nowSize : " + nowSize);
+        return [nowSize, nowNumberList, drawnNumber];
     }
-    function leave() {
-        //window.location.href = "file:///D:/GitHub/lottery/lotteGo.html"
+
+    function buildMutLotteryHTML(arrDrawnNumber, len) {
+        var count = $("#lotteryDiv div[id^='lotte']").length;
+        var szHTMLStr = "";
+
+        szHTMLStr = "<div id=\"lotte" + (count + 1) + "\">";
+
+        for (var i = 0; i < len; i++) {
+            szHTMLStr += "<span class=\"" + (i + 1) + "\">" + arrDrawnNumber[i] + "</span>";
+            szHTMLStr += "<span>&nbsp;&nbsp;</span>";
+        }
+        szHTMLStr += "</div>";
+        console.log("[buildLotteryHTML] arrDrawnNumber : " + arrDrawnNumber);
+        console.log("[buildLotteryHTML] szHTMLStr : " + szHTMLStr);
+
+        if (0 == count) {
+            $("#lotteryDiv").html(szHTMLStr);
+        }
+        else {
+            $("#lotteryDiv > #lotte" + count).after(szHTMLStr);
+        }
+        szHTMLStr = null;
+    }
+
+    function buildOneLotteryHTML(arrDrawnNumber, len) {
+        var count = $("#lotteryDiv div[id^='lotte']").length;
+        var szHTMLStr = "";
+
+        szHTMLStr = "<div id=\"lotte1\">";
+
+        for (var i = 0; i < len; i++) {
+            szHTMLStr += "<span class=\"" + (i + 1) + "\">" + arrDrawnNumber[i] + "</span>";
+            szHTMLStr += "<span>&nbsp;&nbsp;</span>";
+        }
+        szHTMLStr += "</div>";
+        console.log("[buildLotteryHTML] arrDrawnNumber : " + arrDrawnNumber);
+        console.log("[buildLotteryHTML] szHTMLStr : " + szHTMLStr);
+
+        $("#lotteryDiv").html(szHTMLStr);
+        
+        szHTMLStr = null;
+    }
+
+    function generateLottery() {
+        var len = 6;
+        var nowSize = gNumberSize;
+        var nowNumberList = gNumberList.slice();
+        var result;
+        var arrDrawnNumber = new Array(len);
+
+        for (var i = 0; i < len; i++) {
+            [nowSize, nowNumberList, drawnNumber] = drawNumber(nowSize, nowNumberList);
+            console.log("[generateLottery] drawnNumber : " + drawnNumber);
+            console.log("[generateLottery] nowSize : " + nowSize);
+            console.log("[generateLottery] nowNumberList : " + nowNumberList);
+            arrDrawnNumber[i] = drawnNumber;
+        }
+        arrDrawnNumber = arrDrawnNumber.sort((a,b)=>a-b);
+        console.log("[generateLottery] arrDrawnNumber : " + arrDrawnNumber);
+        buildOneLotteryHTML(arrDrawnNumber, len);
+        garrNowDrawnNumber = arrDrawnNumber;
+        arrDrawnNumber = null;
+    }
+
+    function startLotte() {
         let date = new Date();
-        date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000)); // 設定 Cookie 7 天後過期
-        document.cookie = "user=Wu; path=/; expires=" + date.toUTCString();
-
-        document.cookie = "cookie1=value1; path=/; expires=" + date.toUTCString(); // 正確設定另一個 Cookie
-
+        date.setTime(date.getTime() + (1 * 24 * 60 * 60 * 1000)); // 設定 Cookie 1 天後過期
+        console.log("[startLotte] garrNowDrawnNumber : " + garrNowDrawnNumber);
+        var str = "";
+        for (var i = 0; i < 6; i++) {
+            str += garrNowDrawnNumber[i] + "_";
+        }
+        console.log("[startLotte] str : " + str);
+        document.cookie = "lotte=" + str + "; path=/; expires=" + date.toUTCString();
+        var params = document.cookie;
+        console.log("[startLotte] params : " + params);
+        /*document.cookie = "cookie1=value1; path=/; expires=" + date.toUTCString(); // 正確設定另一個 Cookie
         var params = document.cookie.split(";");
-        console.log("params : " + params);
+        console.log("params : " + params);*/
     }
+
+    (function () {
+        
+    }) ();
 </script>

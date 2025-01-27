@@ -7,3 +7,17 @@ console.log("params value : " + params.get("value"));
 console.log("params index : " + params.get("index"));
 
 // 2. COOKIE
+let date = new Date();
+date.setTime(date.getTime() + (1 * 24 * 60 * 60 * 1000)); // 設定 Cookie 1 天後過期
+document.cookie = "cookie1=value1; path=/; expires=" + date.toUTCString(); // 正確設定另一個 Cookie
+var params = document.cookie.split(";");
+console.log("params : " + params);
+
+
+使用場景	                    適合使用 Cookie	      適合使用 Query String
+跨頁面數據存儲（長期保留）	        ✅ 適合	           ❌ 不適合（網址會變長）
+一次性數據傳遞（點擊後傳參）	    ❌ 不適合	        ✅ 適合
+隱藏數據，不讓使用者看到	        ✅ 適合	            ❌ 不適合
+需要保留數據，避免頁面刷新後消失     ✅ 適合	            ❌ 不適合
+簡單數據傳輸，如搜尋關鍵字	        ❌ 不適合	        ✅ 適合
+包含敏感資訊（避免洩漏）	        ✅ 適合	            ❌ 不適合
